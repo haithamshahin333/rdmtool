@@ -28,11 +28,11 @@ param sshPublicKey string
 @description('Admin username for VMs')
 param adminUsername string = 'localuser'
 
-@description('Object ID of the Azure AD group for Key Vault access')
-param keyVaultAdminObjectId string
+// @description('Object ID of the Azure AD group for Key Vault access')
+// param keyVaultAdminObjectId string
 
-@description('Custom domain name for the application')
-param customDomainName string = 'test.com'
+// @description('Custom domain name for the application')
+// param customDomainName string = 'test.com'
 
 // VM configuration
 @description('VM size for the Linux VM')
@@ -73,7 +73,7 @@ var naming = {
   storageAccount: 'st${environmentName}${resourceToken}'
   virtualMachine: 'vm-linux-${environmentName}'
   bastionHost: 'bastion2-${environmentName}'
-  dnsZone: customDomainName
+  // dnsZone: customDomainName
 }
 
 // Deploy user-assigned managed identity for AKS
@@ -87,18 +87,18 @@ module managedIdentity 'modules/managed-identity.bicep' = {
 }
 
 // Deploy Key Vault for certificates and secrets
-module keyVault 'modules/key-vault.bicep' = {
-  name: 'keyVault'
-  params: {
-    name: naming.keyVault
-    location: location
-    tags: tags
-    adminObjectId: keyVaultAdminObjectId
-    privateSubnetResourceId: privateSubnetResourceId
-    virtualNetworkResourceId: virtualNetworkResourceId
-    managedIdentityPrincipalId: managedIdentity.outputs.principalId
-  }
-}
+// module keyVault 'modules/key-vault.bicep' = {
+//   name: 'keyVault'
+//   params: {
+//     name: naming.keyVault
+//     location: location
+//     tags: tags
+//     adminObjectId: keyVaultAdminObjectId
+//     privateSubnetResourceId: privateSubnetResourceId
+//     virtualNetworkResourceId: virtualNetworkResourceId
+//     managedIdentityPrincipalId: managedIdentity.outputs.principalId
+//   }
+// }
 
 // Deploy Azure Container Registry
 module containerRegistry 'modules/container-registry.bicep' = {
@@ -189,8 +189,8 @@ module bastionHost 'modules/bastion-host.bicep' = {
 output resourceGroupName string = resourceGroup().name
 output managedIdentityResourceId string = managedIdentity.outputs.resourceId
 output managedIdentityClientId string = managedIdentity.outputs.clientId
-output keyVaultName string = keyVault.outputs.name
-output keyVaultResourceId string = keyVault.outputs.resourceId
+// output keyVaultName string = keyVault.outputs.name
+// output keyVaultResourceId string = keyVault.outputs.resourceId
 output containerRegistryName string = containerRegistry.outputs.name
 output containerRegistryLoginServer string = containerRegistry.outputs.loginServer
 output aksClusterName string = aksCluster.outputs.name
