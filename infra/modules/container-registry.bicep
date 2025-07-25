@@ -11,6 +11,9 @@ param tags object = {}
 @description('Resource ID of the private subnet for private endpoint')
 param privateSubnetResourceId string
 
+@description('Resource ID of the virtual network for DNS zone linking')
+param virtualNetworkResourceId string
+
 @description('Principal ID of the managed identity for ACR pull access')
 param managedIdentityPrincipalId string
 
@@ -23,7 +26,7 @@ module privateDnsZone 'br/public:avm/res/network/private-dns-zone:0.7.1' = {
     tags: tags
     virtualNetworkLinks: [
       {
-        virtualNetworkResourceId: resourceId('Microsoft.Network/virtualNetworks', split(split(privateSubnetResourceId, '/subnets/')[0], '/')[8])
+        virtualNetworkResourceId: virtualNetworkResourceId
         registrationEnabled: false
       }
     ]

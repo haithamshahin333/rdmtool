@@ -12,14 +12,14 @@ param location string = resourceGroup().location
 param resourceToken string = uniqueString(subscription().id, resourceGroup().id)
 
 // Existing VNET configuration parameters
+@description('Resource ID of the existing virtual network')
+param virtualNetworkResourceId string
+
 @description('Resource ID of the existing private subnet')
 param privateSubnetResourceId string
 
 // @description('Resource ID of the existing public subnet')
 // param appGatewaySubnetResourceId string
-
-@description('Resource ID of the existing bastion subnet')
-param bastionSubnetResourceId string
 
 // Authentication and security parameters
 @description('SSH public key for Linux VMs')
@@ -62,9 +62,6 @@ var tags = {
   Environment: environmentName
 }
 
-// Extract virtual network resource ID from subnet resource ID
-var virtualNetworkResourceId = split(bastionSubnetResourceId, '/subnets/')[0]
-
 // Resource naming convention
 var naming = {
   resourceGroup: resourceGroup().name
@@ -98,6 +95,7 @@ module keyVault 'modules/key-vault.bicep' = {
     tags: tags
     adminObjectId: keyVaultAdminObjectId
     privateSubnetResourceId: privateSubnetResourceId
+    virtualNetworkResourceId: virtualNetworkResourceId
     managedIdentityPrincipalId: managedIdentity.outputs.principalId
   }
 }
@@ -110,6 +108,7 @@ module containerRegistry 'modules/container-registry.bicep' = {
     location: location
     tags: tags
     privateSubnetResourceId: privateSubnetResourceId
+    virtualNetworkResourceId: virtualNetworkResourceId
     managedIdentityPrincipalId: managedIdentity.outputs.principalId
   }
 }

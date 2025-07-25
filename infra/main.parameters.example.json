@@ -14,7 +14,7 @@
     "privateSubnetResourceId": {
       "value": ""
     },
-    "bastionSubnetResourceId": {
+    "virtualNetworkResourceId": {
       "value": ""
     },
     "sshPublicKey": {
