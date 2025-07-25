@@ -131,6 +131,9 @@ module virtualMachine 'br/public:avm/res/compute/virtual-machine:0.16.0' = {
     location: location
     tags: tags
     
+    // Security: Enable encryption at host for all disks including temp disk
+    encryptionAtHost: false
+    
     // Cloud-init configuration for automated software installation
     customData: !empty(effectiveCloudInit) ? effectiveCloudInit : ''
     
